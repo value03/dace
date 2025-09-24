@@ -15,6 +15,11 @@ type StateAlloc = dict[AccessNode,list[SDFGState]]
 type NodeAlloc = dict[AccessNode, list[Node]]
 
 
+def inScope(scopedict: dict[Node, SDFGState | Node | None], node: Node, scope: Node) -> bool:
+    node_scope = scopedict[node]
+    return node_scope != None and (node_scope == scope or inScope(scopedict, node_scope, scope) if isinstance(node_scope, Node) else False)
+
+
 
 def create_allocation_report(to : dict[SDFG | SDFGState | EntryNode, list[tuple[SDFG, SDFGState | None,AccessNode | None, bool, bool, bool]]]):
 
@@ -56,7 +61,7 @@ def create_allocation_report(to : dict[SDFG | SDFGState | EntryNode, list[tuple[
                     nodes_allocated = []
                     scope_dict = state.scope_dict() if state != None else {}
                     for node in state.nodes() if state != None else []:
-                        if scope_dict[node] == scope or node == scope:
+                        if inScope(scope_dict, node, scope) or node == scope:
                             nodes_allocated.append(node)
 
                     #if state containing map should also be highlighted
