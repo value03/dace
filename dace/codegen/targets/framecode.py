@@ -23,6 +23,7 @@ from dace.sdfg.analysis import cfg as cfg_analysis
 from dace.sdfg.state import ControlFlowBlock, ControlFlowRegion, LoopRegion
 from dace.transformation.passes.analysis import StateReachability, loop_analysis
 
+from dace.codegen.instrumentation.allocation import create_allocation_report
 
 def _get_or_eval_sdfg_first_arg(func, sdfg):
     if callable(func):
@@ -794,6 +795,7 @@ DACE_EXPORTED void __dace_set_external_memory_{storage.name}({mangle_dace_state_
                 self.where_allocated[(sdfg, name)] = curscope
             else:
                 self.where_allocated[(sdfg, name)] = cursdfg
+        create_allocation_report(self.to_allocate)
 
     def allocate_arrays_in_scope(self, sdfg: SDFG, cfg: ControlFlowRegion, scope: Union[nodes.EntryNode, SDFGState,
                                                                                         SDFG],
