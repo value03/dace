@@ -65,7 +65,7 @@ def create_allocation_report(to : dict[SDFG | SDFGState | EntryNode, list[tuple[
                             nodes_allocated.append(node)
 
                     #if state containing map should also be highlighted
-                    states_allocated = [state] if state != None else [];
+                    states_allocated = [state] if state != None else []
                     print("\n\n")
 
             if access_node != None:
