@@ -1,5 +1,5 @@
 import json
-from os import error
+import os
 from pprint import pprint
 
 
@@ -81,7 +81,10 @@ def create_allocation_report(to : dict[SDFG | SDFGState | EntryNode, list[tuple[
     pprint(node_alloc)
     pprint(report)
 
+
+
     for sdfg in report:
+        os.makedirs(f"{sdfg.build_folder}/perf", exist_ok=True)
         with open(f"{sdfg.build_folder}/perf/allocation-report-{str(hash(str(report[sdfg])))}.json", "x") as f:
             json.dump(report[sdfg],f)
 
